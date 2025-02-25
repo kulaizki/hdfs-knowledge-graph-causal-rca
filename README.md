@@ -7,7 +7,7 @@ This repository contains the code and resources for a project on root cause anal
 1.  **Clone the repository:**
 
     ```bash
-    git clone [https://github.com/kulaizki/hdfs-knowledge-graph-causal-rca.git](https://github.com/kulaizki/hdfs-knowledge-graph-causal-rca.git)
+    git clone https://github.com/kulaizki/hdfs-knowledge-graph-causal-rca.git
     cd hdfs-knowledge-graph-causal-rca
     ```
 
