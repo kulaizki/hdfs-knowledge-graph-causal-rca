@@ -93,6 +93,9 @@ dmypy.json
 data/raw/*
 !data/raw/.gitkeep
 
+data/processed/*
+!data/processed/.gitkeep
+
 # Reports - IGNORE REPORTS, but keep the folder structure.
 reports/*
 !reports/.gitkeep
