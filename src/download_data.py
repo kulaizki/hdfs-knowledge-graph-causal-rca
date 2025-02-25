@@ -1,9 +1,8 @@
-# src/download_data.py
 import os
 import subprocess
 import tarfile
 import zipfile
-import requests  # For checking if online
+import requests  
 import shutil
 
 
