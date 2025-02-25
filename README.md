@@ -1,0 +1,3 @@
+# hdfs-knowledge-graph-causal-rca
+
+This repository contains the code and resources for a project on root cause analysis (RCA) in the Hadoop Distributed File System (HDFS) using knowledge graphs and causal inference. The project leverages trace data to build a knowledge graph representing HDFS components, requests, and operations, and then applies the Root Cause Discovery (RCD) algorithm and causal inference techniques to identify the root causes of anomalies.
