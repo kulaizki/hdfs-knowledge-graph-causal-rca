@@ -43,12 +43,6 @@ class HDFSKnowledgeGraph:
         else:
             print(f"Warning: Template file not found at {templates_path}")
         
-        # Load alternative templates for reference if needed
-        alt_templates_path = os.path.join(self.hdfs_v2_dir, "HDFS_templates.csv")
-        if os.path.exists(alt_templates_path):
-            self.alt_templates = pd.read_csv(alt_templates_path)
-            print(f"Loaded {len(self.alt_templates)} alternative templates from HDFS_templates.csv")
-        
         # Load structured logs
         structured_logs_path = os.path.join(self.hdfs_v2_dir, "HDFS_2k.log_structured.csv")
         if os.path.exists(structured_logs_path):
@@ -356,40 +350,121 @@ class HDFSKnowledgeGraph:
         
         return stats
 
-# Example usage function
-def build_hdfs_knowledge_graph(data_dir="data/processed", output_dir="reports"):
-    """Build and save a knowledge graph from HDFS data"""
-    # Create output directory if it doesn't exist
-    os.makedirs(output_dir, exist_ok=True)
+# Utility functions for external usage
+
+def create_hdfs_knowledge_graph(data_dir="data/processed"):
+    """
+    Create and build a knowledge graph from HDFS data
     
-    # Create the knowledge graph
+    Parameters:
+    -----------
+    data_dir : str
+        Directory containing processed data files
+        
+    Returns:
+    --------
+    HDFSKnowledgeGraph
+        The built knowledge graph object
+    """
     kg = HDFSKnowledgeGraph(data_dir)
     kg.load_data()
     kg.build_graph()
-    
-    # Identify common patterns
-    kg.identify_patterns()
-    
-    # Print statistics
-    stats = kg.get_graph_statistics()
-    print("\nKnowledge Graph Statistics:")
-    for key, value in stats.items():
-        if isinstance(value, Counter):
-            print(f"  {key}:")
-            for k, v in value.most_common():
-                print(f"    {k}: {v}")
-        else:
-            print(f"  {key}: {value}")
-    
-    # Visualize a subset of the graph
-    visualization_path = os.path.join(output_dir, "hdfs_knowledge_graph.png")
-    kg.visualize(max_nodes=500, output_path=visualization_path)
-    
-    # Save the graph
-    graph_path = os.path.join(output_dir, "hdfs_knowledge_graph.pkl")
-    kg.save_graph(graph_path)
-    
     return kg
 
-if __name__ == "__main__":
-    build_hdfs_knowledge_graph()
+def find_common_patterns(kg):
+    """
+    Identify common patterns in the knowledge graph
+    
+    Parameters:
+    -----------
+    kg : HDFSKnowledgeGraph
+        The knowledge graph object
+        
+    Returns:
+    --------
+    list
+        List of common event sequences and their frequencies
+    """
+    return kg.identify_patterns()
+
+def analyze_graph(kg):
+    """
+    Get statistical analysis of the knowledge graph
+    
+    Parameters:
+    -----------
+    kg : HDFSKnowledgeGraph
+        The knowledge graph object
+        
+    Returns:
+    --------
+    dict
+        Dictionary containing graph statistics
+    """
+    return kg.get_graph_statistics()
+
+def visualize_graph(kg, max_nodes=100, output_path=None):
+    """
+    Visualize the knowledge graph
+    
+    Parameters:
+    -----------
+    kg : HDFSKnowledgeGraph
+        The knowledge graph object
+    max_nodes : int
+        Maximum number of nodes to include in visualization
+    output_path : str
+        Path to save the visualization (if None, just display)
+    """
+    kg.visualize(max_nodes=max_nodes, output_path=output_path)
+
+def save_knowledge_graph(kg, output_path):
+    """
+    Save the knowledge graph to a file
+    
+    Parameters:
+    -----------
+    kg : HDFSKnowledgeGraph
+        The knowledge graph object
+    output_path : str
+        Path to save the graph
+    """
+    kg.save_graph(output_path)
+
+def load_knowledge_graph(input_path, data_dir="data/processed"):
+    """
+    Load a knowledge graph from a file
+    
+    Parameters:
+    -----------
+    input_path : str
+        Path to the saved graph file
+    data_dir : str
+        Directory containing processed data files
+        
+    Returns:
+    --------
+    HDFSKnowledgeGraph
+        The loaded knowledge graph object
+    """
+    kg = HDFSKnowledgeGraph(data_dir)
+    kg.load_graph(input_path)
+    return kg
+
+def get_trace_subgraph(kg, block_id):
+    """
+    Get a subgraph for a specific trace
+    
+    Parameters:
+    -----------
+    kg : HDFSKnowledgeGraph
+        The knowledge graph object
+    block_id : str
+        The block ID to extract the trace for
+        
+    Returns:
+    --------
+    networkx.DiGraph
+        Subgraph containing the specified trace
+    """
+    return kg.get_subgraph_for_trace(block_id)
